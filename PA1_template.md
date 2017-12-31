@@ -25,7 +25,8 @@ The raw data provided includes the number of steps taken by an anonymous individ
 
 The data is loaded into R using the following code
 
-```{r}
+
+```r
 #check to see if unzip datafile exists and load it
 if (file.exists('activity.csv')){
   a1<-read.csv('activity.csv')
@@ -37,7 +38,8 @@ library(plyr)
 ```
 ## What is mean total number of steps taken per day?
 
-```{r}
+
+```r
 #total number of steps taken per day
 #apply the sum function after grouping data by date
 a2<-tapply(a1$steps,a1$date,sum,na.rm=T)
@@ -57,18 +59,34 @@ hist(a4$steps,xlab="Total number of steps taken per day",
               main="Total number of steps taken measured by frequency in days",
               yaxt="n")
 axis(2,at=s,labels = as.character(s),cex.axis=0.8)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
 #mean and median of total number of steps
 a41<-round(mean(a4$steps,na.rm=T))
 a42<-round(median(a4$steps,na.rm=T))
 print(paste("Mean number of steps per day is", a41))
+```
+
+```
+## [1] "Mean number of steps per day is 9354"
+```
+
+```r
 print(paste("Median number of steps per day is", a42))
+```
+
+```
+## [1] "Median number of steps per day is 10395"
 ```
 
 ## What is the average daily activity pattern?
 
 The average daily activity pattern can be infered from the following line chart:
-```{r}
+
+```r
 #calculate mean of steps after grouping by 5 min. intervals 
 #over all days
 a3<-tapply(a1$steps,a1$interval,mean,na.rm=T)
@@ -99,8 +117,9 @@ points(x=as.numeric(row.names(a13)),y=a13[1,2])
 textLabel<-paste("Max. of Avg. number of steps is", as.character(a13[1,2]), 
                  "\nand happens in interval", row.names(a13))
 text(x=as.numeric(row.names(a13)),y=a13[1,2],labels=textLabel,cex=0.85,pos=4)
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 
 ### Conclusion
@@ -111,7 +130,8 @@ Most of the activity happens during the morning hours with the maximum of averag
 
 Some rows do not contain data. While calculating the mean and median, such rows of incomplete data were ignored. By replacng the not available data with mean values collected at other times we obtain the following results:
 
-```{r}
+
+```r
 #imputation of missing data
 
 #index of missing values
@@ -122,7 +142,13 @@ a7<-a1[a6,2:3]
 
 #print the number of missing values using dimension of the data frame
 print(paste("Number of missing values is", dim(a7)[1]))
+```
 
+```
+## [1] "Number of missing values is 2304"
+```
+
+```r
 # join the table of missing values with mean values of intervals generated
 # earlier and stored in a5 i.e average values of steps grouped by  
 # 5 minute invervals over two months
@@ -154,12 +180,27 @@ hist(a43$steps,xlab="Total number of steps taken per day",
                 "with NA values imputed"),
      yaxt="n")
 axis(2,at=s,labels = as.character(s),cex.axis=0.8)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+```r
 #mean and median of total number of steps
 a44<-round(mean(a43$steps,na.rm=T))
 a45<-round(median(a43$steps,na.rm=T))
 print(paste("Mean number of steps (imputed values) per day is", a44))
+```
+
+```
+## [1] "Mean number of steps (imputed values) per day is 10766"
+```
+
+```r
 print(paste("Median number of steps (imputed values) per day is", a45))
+```
+
+```
+## [1] "Median number of steps (imputed values) per day is 10762"
 ```
 
 ### Conclusion.
@@ -172,7 +213,8 @@ The histogram made with imputed values shows a marked increase of 8 days for the
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 #subset data for when day is on a weekday
 a8<-which(weekdays(as.Date(a1$date))!="Saturday" 
           & weekdays(as.Date(a1$date))!="Sunday")
@@ -254,6 +296,8 @@ textLabel<-paste("Max. of avg. number of steps is", as.character(a18[1,2]),
 text(x=as.numeric(row.names(a18)),y=a18[1,2],col="red",labels=textLabel,
      cex=0.7,pos=4)
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ### Conclusion. 
 The average number of steps taken on weekends is lower than the number of steps taken on a weekday. The maximum of the average number of steps is about 15% lower on the weekends and happens later in the day on the weekends as compared to weekdays. 

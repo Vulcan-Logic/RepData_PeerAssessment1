@@ -1,0 +1,71 @@
+---
+title: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Personal Fitness Monitoring using activity monitoring devices. 
+
+During the past few years, small and light body activity monitoring devices have become popular due to the affordable prices as well as wide spread availability of such devices. 
+
+A good amount of data collected by such devices has been collated by enthusiasts and volunteers and this data is now available on the internet. 
+
+Enthusiasts like to collect data to maintain their heatlh and/or improve their fitness levels. 
+
+This small study demonstrates as to how the data collected by a personal activity monitoring device can be used to process, interpret, display and provide information about the quantum of activity performed. 
+
+The raw data provided includes the number of steps taken by an anonymous individual, in 5 minute intervals and collected during the months of October and November 2012. 
+
+The data is loaded into R using the following code
+
+
+```{r}
+#check to see if unzip datafile exists and load it
+if (file.exists('activity.csv')){
+  a1<-read.csv('activity.csv')
+} else {
+  unzip('./activity.zip',exdir='./')
+  a1<-read.csv('activity.csv')
+}
+```
+The mean total number of steps taken per day can be found by running the following code:
+```{r}
+#total number of steps taken per day
+#apply the sum function after grouping data by date
+a2<-tapply(a1$steps,a1$date,sum,na.rm=T)
+
+#make a data frame from the list
+a4<-data.frame(names = row.names(a2), a2)
+row.names(a4)<-NULL
+names(a4)<-c("dates","steps")
+
+#make/display histogram of total number of steps taken per day
+#sequence for tickmarks for y axis
+s<-seq(0,28,by=2) 
+
+#make the histogram 
+hist(a4$steps,xlab="Total number of steps taken per day",
+              ylab="Number of days (frequency in days)", col="blue",
+              main="Total number of steps taken measured by frequency in days",
+              yaxt="n")
+axis(2,at=s,labels = as.character(s),cex.axis=0.8)
+
+#mean and median of total number of steps
+a41<-round(mean(a4$steps,na.rm=T))
+a42<-round(median(a4$steps,na.rm=T))
+print(paste("Mean number of steps per day is", a41))
+print(paste("Median number of steps per day is", a42))
+```
+
+
+
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
